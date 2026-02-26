@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # vercel
 .vercel
@@ -39,3 +43,184 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ============================================
+# Python/Django Backend Security
+# ============================================
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Django specific
+backend/*.log
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/staticfiles/
+backend/mediafiles/
+backend/media/
+
+# Sensitive files - NEVER commit these
+backend/.env
+backend/.env.*
+backend/config/settings_local.py
+backend/secrets.json
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Django migrations (optional - some teams commit these)
+# backend/*/migrations/*.py
+# !backend/*/migrations/__init__.py
+
+# ============================================
+# Security & Credentials - CRITICAL
+# ============================================
+
+# API Keys & Secrets
+.secrets/
+secrets/
+credentials/
+*.credentials
+api_keys.txt
+*.token
+
+# AWS & Cloud credentials
+.aws/
+*.pem
+*.ppk
+
+# SSH keys
+*.key
+id_rsa
+id_rsa.pub
+*.ssh
+
+# SSL certificates
+*.crt
+*.cer
+*.der
+*.p7b
+
+# ============================================
+# Docker & Infrastructure
+# ============================================
+
+# Docker volumes & data
+/docker/volumes/
+docker-compose.override.yml
+.dockerignore.local
+
+# ============================================
+# Uploads & Media (Instagram Clone specific)
+# ============================================
+
+# User uploaded content - can be large
+backend/media/*
+backend/uploads/*
+!backend/media/.gitkeep
+!backend/uploads/.gitkeep
+
+# Temporary uploads
+tmp/
+temp/
+*.tmp
+
+# ============================================
+# IDE & Editor files
+# ============================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# JetBrains
+.idea/
+*.swp
+*.swo
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ============================================
+# OS files
+# ============================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.directory
+
+# ============================================
+# Logs & Monitoring
+# ============================================
+
+# All log files
+*.log
+logs/
+*.log.*
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Redis dump
+dump.rdb
+
+# ============================================
+# Testing & Coverage
+# ============================================
+
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+
+# ============================================
+# Backup & Temporary files
+# ============================================
+
+# Backups
+*.bak
+*.backup
+*.old
+*.orig
+
+# Compressed files (if containing sensitive data)
+# *.zip
+# *.tar.gz
+# *.rar
