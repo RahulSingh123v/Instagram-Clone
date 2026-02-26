@@ -1,0 +1,15 @@
+Django>=5.0
+djangorestframework
+psycopg2-binary
+redis
+django-redis
+celery
+boto3
+argon2-cffi
+djangorestframework-simplejwt
+django-cors-headers
+python-dotenv
+structlog
+uuid6
+boto3
+celery
