@@ -104,13 +104,13 @@ class EmailOTP(models.Model):
 
     user = models.ForeignKey(User,on_delete=models.CASCADE)
 
-    otp_hash = models.CharField(max_lenght=64)
+    otp_hash = models.CharField(max_length=64)
 
     expires_at = models.DateTimeField()
 
-    is_used = models.BooleanField(deafult=False)
+    is_used = models.BooleanField(default=False)
 
-    attempt_count = models.PositiveIntegerFieldIntegerField(default=0)
+    attempt_count = models.PositiveIntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -140,10 +140,10 @@ class RefreshToken(models.Model):
     last_used_at = models.DateTimeField(null=True,blank=True)
 
     class Meta:
-        index = [
-            models.index(fields=["user"]),
-            models.index(field=["expires_at"]),
-            models.index(fields=["is_revoked"]),
+        indexes = [
+            models.Index(fields=["user"]),
+            models.Index(fields=["expires_at"]),
+            models.Index(fields=["is_revoked"]),
             models.Index(fields=["user"], name="active_refresh_idx", condition=models.Q(is_revoked=False))
         ]
 

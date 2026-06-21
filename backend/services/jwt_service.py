@@ -4,8 +4,8 @@ import structlog
 
 from django.conf import settings
 from django.utils import timezone
-from backend.apps.accounts.models import RefreshToken
-from backend.core import uuid7_str
+from apps.accounts.models import RefreshToken
+from core.uuid import uuid7_str
 
 
 logger = structlog.get_logger(__name__)

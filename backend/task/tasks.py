@@ -1,8 +1,8 @@
 from celery import shared_task
-from backend.services.email_service import send_email
+from services.email_service import send_email
 import structlog
 from botocore.exceptions import ClientError, EndpointConnectionError
-from backend.apps.accounts.models import EmailOTP, RefreshToken, PasswordResetToken
+from apps.accounts.models import EmailOTP, RefreshToken, PasswordResetToken
 from django.utils import timezone
 
 logger = structlog.get_logger(__name__)

@@ -1,5 +1,10 @@
 #!/bin/sh
 
+echo "Making migrations..."
+python manage.py makemigrations accounts
+python manage.py makemigrations posts
+python manage.py makemigrations
+
 echo "Applying migrations..."
 python manage.py migrate
 

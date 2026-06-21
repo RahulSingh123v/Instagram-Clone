@@ -25,7 +25,7 @@ SECRET_KEY = 'django-kasecure-5z)bq&+xjb9u@i3fgv44kvp#%nqlf49@#yk-at+(#(_b0a5z9j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,21 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',
-    'posts',
+    'apps.accounts',
+    'apps.posts',
     'rest_framework',
-    'corsheaders'
-    
+    'corsheaders',
 ]
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "backend.core.authentication.CookieJWTAuthentication",
-    ],
-}
+# REST_FRAMEWORK is configured below with the correct authentication class
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -94,16 +90,8 @@ DATABASES = {
     }
 }
 
-DATABASES["mongo"] = {
-    "ENGINE": "djongo",
-    "NAME": "myapp_mongo",
-    "CLIENT": {
-        "host": "mongo",
-        "username": "mongo_user",
-        "password": "mongo_pass",
-        "authSource": "admin",
-    }
-}
+# MongoDB (djongo) was removed — no models use it.
+# Raw pymongo can be used directly if needed in the future.
 
 CACHES = {
     "default": {
@@ -153,6 +141,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 ACCESS_TOKEN_LIFETIME = timedelta(minutes=10)
 REFRESH_TOKEN_LIFETIME = timedelta(days=7)
+PASSWORD_RESET_TOKEN_LIFETIME = timedelta(hours=1)
 
 
 
@@ -173,13 +162,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-CORS_ALLOW_CREDENTIAL = True
-CORS_ALLOW_ORIGIN ={
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
     "https://localhost:3000",
-    "https://127.0.0.1:3000"
-}
+    "https://127.0.0.1:3000",
+]
 
 import structlog
 

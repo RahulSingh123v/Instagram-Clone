@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from backend.services.rate_limit import Ratelimiter
-from backend.core.rate_limits import RATE_LIMITS
+from services.rate_limit import Ratelimiter
+from core.rate_limits import RATE_LIMITS
 
 def rate_limit(endpoint_name: str,identifier_type="ip"):
     def decorator(view_func):
@@ -25,7 +25,7 @@ def rate_limit(endpoint_name: str,identifier_type="ip"):
             if not allowed:
                 return Response(
                     {"error":"Rate limit exceeded"},
-                    status=status.HTTP_429_TOO_MANY_REQUEST
+                    status=status.HTTP_429_TOO_MANY_REQUESTS
                 )
 
             return view_func(self,request,*args,**kwargs)

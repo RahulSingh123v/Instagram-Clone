@@ -8,21 +8,18 @@ from django.conf import settings
 from django.db import transaction
 import secrets
 import hashlib
-from backend.core.decorators.rate_limit import rate_limit as endpoint_rate_limit
+from core.decorators.rate_limit import rate_limit as endpoint_rate_limit
 from apps.accounts.models import RefreshToken, User, EmailOTP, PasswordResetToken
 from apps.accounts.serializers import *
-from backend.services.otp_service import generate_otp
-from backend.services.jwt_service import generate_access_token, generate_refresh_token
-from backend.services.rate_limit import rate_limit # NAive rate limit 
-from structlog  import get_logger
+from services.otp_service import generate_otp
+from services.jwt_service import generate_access_token, generate_refresh_token
+from services.rate_limit import rate_limit # Naive rate limit
+from structlog import get_logger
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import api_view
 from django_redis import get_redis_connection
 from rest_framework.permissions import IsAuthenticated
-from django.db import transaction
-logger = get_logger(__name__)   
-
-redis_client = get_redis_connection("default")
+logger = get_logger(__name__)
 
 class SignupView(APIView):  
     @endpoint_rate_limit("signup", identifier_type="ip")
@@ -328,6 +325,7 @@ class RefreshView(APIView):
 
 class LogoutView(APIView):
     def post(self, request):
+        redis_client = get_redis_connection("default")
 
         refresh = request.COOKIES.get("refresh_token")
 
@@ -390,7 +388,7 @@ class PasswordResetRequestView(APIView):
             )
             
         
-        token = secrets.toke_urlsafe(32)
+        token = secrets.token_urlsafe(32)
         token_hash = hashlib.sha256(token.encode()).hexdigest()
 
         with transaction.atomic():
@@ -430,7 +428,7 @@ class SessionListView(APIView):
 class PasswordRestConfirmView(APIView):
 
     def post(self,request):
-        serializer = PasswordResetConfirmSerializer(data=request.data,conetxt={"request":request})
+        serializer = PasswordResetConfirmSerializer(data=request.data, context={"request": request})
 
         serializer.is_valid(raise_exception=True)
 
@@ -441,7 +439,7 @@ class PasswordRestConfirmView(APIView):
         token_hash = hashlib.sha256(otp.encode()).hexdigest()
 
         try:
-            otp_record = PasswordResetToken.objects.select_for_update.get(
+            otp_record = PasswordResetToken.objects.select_for_update().get(
                 user__email=email,
                 token_hash=token_hash,
                 is_used=False,
@@ -451,7 +449,7 @@ class PasswordRestConfirmView(APIView):
         except PasswordResetToken.DoesNotExist:
             logger.warning("Passwrd_reset_token_not_found",email=email)
             return Response(
-                "error":"Invalid or expired token",
+                {"error": "Invalid or expired token"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -475,7 +473,19 @@ class PasswordRestConfirmView(APIView):
             status=status.HTTP_200_OK,
         )
     
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            "id": str(user.id),
+            "username": user.username,
+            "email": user.email,
+        })
+
 @ensure_csrf_cookie
+
 @api_view(["GET"])
 def csrf_cookie(request):
     return Response({"message": "CSRF cookie set"})

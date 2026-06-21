@@ -1,6 +1,6 @@
 import re
 from rest_framework import serializers
-from backend.apps.accounts.models import User
+from apps.accounts.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.contrib.auth import authenticate
@@ -8,8 +8,8 @@ from django.contrib.auth import authenticate
 
 
 
-class SignupSerializer(serializers.Serialiazer):
-    email = serializers.EmialField()
+class SignupSerializer(serializers.Serializer):
+    email = serializers.EmailField()
     username = serializers.CharField(max_length=30)
     password = serializers.CharField(write_only=True, min_length=8)
     
@@ -31,7 +31,7 @@ class SignupSerializer(serializers.Serialiazer):
         
         return value
     
-    def validate_passowrd(self,value):
+    def validate_password(self,value):
         try:
             validate_password(value)
         except DjangoValidationError as e:
@@ -62,7 +62,7 @@ class LoginSerializer(serializers.Serializer):
 
         # Verify password manually
         if not user.check_password(password):
-            user.register_failed_login()
+            user.register_failed_logins()
             raise serializers.ValidationError("Invalid email or password")
 
         # Success → reset attempts
@@ -74,14 +74,14 @@ class LoginSerializer(serializers.Serializer):
         attrs["user"] = user
         return attrs
 
-class LoginOTPVerifySerializer(serializers.Serialzer): 
+class LoginOTPVerifySerializer(serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.CharField(max_length=6)
 
     def validate_email(self,value):
         return value.strip().lower()
 
-class SignupOTPVerifySerializer(serializers.Serialzer): 
+class SignupOTPVerifySerializer(serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.CharField(max_length=6)
 

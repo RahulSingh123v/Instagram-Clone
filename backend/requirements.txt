@@ -11,5 +11,4 @@ django-cors-headers
 python-dotenv
 structlog
 uuid6
-boto3
-celery
+PyJWT

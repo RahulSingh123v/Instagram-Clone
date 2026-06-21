@@ -6,7 +6,7 @@ from apps.accounts.models import User
 
 class CookieJWTAuthentication(BaseAuthentication):
 
-    def authenticate(Self,request):
+    def authenticate(self, request):
         token = request.COOKIES.get("access_token")
 
         if not token:
@@ -16,7 +16,7 @@ class CookieJWTAuthentication(BaseAuthentication):
             payload = jwt.decode(
                 token,
                 settings.SECRET_KEY,
-                algorithm=["HS256"]
+                algorithms=["HS256"]
             )
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed("Token expired")

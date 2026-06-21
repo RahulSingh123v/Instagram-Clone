@@ -3,7 +3,7 @@ import hashlib
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
-from backend.apps.accounts.models import EmailOTP
+from apps.accounts.models import EmailOTP
 import structlog
 
 logger = structlog.get_logger(__name__)
